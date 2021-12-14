@@ -11,7 +11,6 @@ public interface P2PNodeInterface {
     void uploadFile(File file) throws IOException, NoSuchAlgorithmException;
     byte[] downloadFile(String fileHash) throws IOException;
     FileInformation getFileInfo(String fileHash) throws RemoteException;
-    Map<String, FileInformation> listFiles() throws RemoteException;
-    Map<String, FileInformation> searchFiles() throws RemoteException;
+    Map<String, FileInformation> listFiles() throws IOException, NoSuchAlgorithmException;
     void editFile(String fileHash, FileInformation fileInformation);
 }

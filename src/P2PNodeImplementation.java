@@ -12,6 +12,7 @@ import java.security.MessageDigest;
 import java.security.NoSuchAlgorithmException;
 import java.util.HashMap;
 import java.util.Map;
+import java.util.Objects;
 
 public class P2PNodeImplementation extends UnicastRemoteObject implements P2PNodeInterface {
     private File folderPath;
@@ -22,19 +23,21 @@ public class P2PNodeImplementation extends UnicastRemoteObject implements P2PNod
     private Map<String, P2PNodeInterface> networkNodes = new HashMap<>();
     private Map<String, FileInformation> networkFiles = new HashMap<>();
 
-    protected P2PNodeImplementation(File folderPath, String uid, int clientPort) throws RemoteException, UnknownHostException {
+    protected P2PNodeImplementation(File folderPath, String uid, int clientPort) throws IOException, NoSuchAlgorithmException {
         this.folderPath = folderPath;
         this.uid = uid;
         this.clientIp = InetAddress.getLocalHost().getHostAddress();
         this.clientPort = clientPort;
+        this.uploadLocalFilesToNetwork();
     }
 
-    protected P2PNodeImplementation(File folderPath, String uid, P2PNodeInterface parentNode, int clientPort) throws RemoteException, UnknownHostException {
+    protected P2PNodeImplementation(File folderPath, String uid, P2PNodeInterface parentNode, int clientPort) throws IOException, NoSuchAlgorithmException {
         this.folderPath = folderPath;
         this.uid = uid;
         this.parentNode = parentNode;
         this.clientIp = InetAddress.getLocalHost().getHostAddress();
         this.clientPort = clientPort;
+        this.uploadLocalFilesToNetwork();
     }
 
     //INTERFACE METHODS
@@ -77,13 +80,9 @@ public class P2PNodeImplementation extends UnicastRemoteObject implements P2PNod
     }
 
     @Override
-    public Map<String, FileInformation> listFiles() throws RemoteException {
-        return networkFiles;
-    }
-
-    @Override
-    public Map<String, FileInformation> searchFiles() throws RemoteException {
-        return null;
+    public Map<String, FileInformation> listFiles() throws IOException, NoSuchAlgorithmException {
+        this.uploadLocalFilesToNetwork();
+        return this.networkFiles;
     }
 
     @Override
@@ -91,18 +90,17 @@ public class P2PNodeImplementation extends UnicastRemoteObject implements P2PNod
         this.networkFiles.replace(fileHash, fileInformation);
     }
 
-    private void calculateFilesHashes() throws NoSuchAlgorithmException, IOException {
-        for (Map.Entry<String, FileInformation> entry : networkFiles.entrySet()) {
+    private void uploadLocalFilesToNetwork() throws NoSuchAlgorithmException, IOException {
+        for (File file : Objects.requireNonNull(folderPath.listFiles())) {
             MessageDigest shaDigest = MessageDigest.getInstance("SHA-256");
-            File file = entry.getValue().getFile();
-            String hash = checksum(shaDigest, file);
-            if(!hash.equals(entry.getValue().getHash())) {
-                entry.getValue().setHash(hash);
+            String fileHash = checksum(shaDigest, file);
+            if(!networkFiles.containsKey(fileHash)) {
+                FileInformation fileInformation = new FileInformation(file, this.clientIp, this.clientPort);
+                networkFiles.put(fileHash, fileInformation);
             }
         }
     }
 
-    //CODE FROM GEEKSFORGEEKS
     private String checksum(MessageDigest digest, File file) throws IOException {
         FileInputStream fis = new FileInputStream(file);
 

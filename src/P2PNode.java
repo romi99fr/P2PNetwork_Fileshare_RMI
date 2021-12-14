@@ -3,6 +3,7 @@ import java.rmi.NotBoundException;
 import java.rmi.RemoteException;
 import java.rmi.registry.LocateRegistry;
 import java.rmi.registry.Registry;
+import java.security.NoSuchAlgorithmException;
 import java.util.*;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
@@ -52,7 +53,7 @@ public class P2PNode {
             System.out.println("Welcome to the P2P network, choose one option:");
             fileshareActions(node);
         }
-        catch(InterruptedException | IOException e) {
+        catch(InterruptedException | IOException | NoSuchAlgorithmException e) {
             e.printStackTrace();
         }
     }
@@ -71,7 +72,7 @@ public class P2PNode {
             System.out.println("Welcome to the P2P network, choose one option:");
             fileshareActions(node);
         }
-        catch(NotBoundException | InterruptedException | IOException e) {
+        catch(NotBoundException | InterruptedException | IOException | NoSuchAlgorithmException e) {
             e.printStackTrace();
         }
     }
@@ -89,7 +90,7 @@ public class P2PNode {
         return matcher.matches();
     }
 
-    public static void fileshareActions(P2PNodeInterface node) throws IOException {
+    public static void fileshareActions(P2PNodeInterface node) throws IOException, NoSuchAlgorithmException {
         while (true) {
             System.out.println( "1 - Upload file\n" +
                                 "2 - Download file\n" +
@@ -109,7 +110,7 @@ public class P2PNode {
         }
     }
 
-    public static void uploadFile(P2PNodeInterface node) throws IOException {
+    public static void uploadFile(P2PNodeInterface node) throws IOException, NoSuchAlgorithmException {
         System.out.println("Enter the full path of the file you want to upload:");
         String filePath = br.readLine();
         File file = new File(filePath);
@@ -137,7 +138,7 @@ public class P2PNode {
         System.out.println("File downloaded!");
     }
 
-    public static void listFiles(P2PNodeInterface node) throws RemoteException {
+    public static void listFiles(P2PNodeInterface node) throws IOException, NoSuchAlgorithmException {
         System.out.println("Listing available files on the network");
         Map<String, FileInformation> networkFiles = node.listFiles();
         for (Map.Entry<String, FileInformation> entry : networkFiles.entrySet()) {
@@ -148,7 +149,7 @@ public class P2PNode {
         }
     }
 
-    public static void searchFiles(P2PNodeInterface node) throws IOException {
+    public static void searchFiles(P2PNodeInterface node) throws IOException, NoSuchAlgorithmException {
         Map<String, FileInformation> networkFiles = node.listFiles();
         List<String> resultFiles = new ArrayList<>();
         System.out.println("Select the attribute you want to search by:");

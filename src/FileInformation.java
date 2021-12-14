@@ -1,4 +1,8 @@
 import java.io.File;
+import java.io.FileInputStream;
+import java.io.IOException;
+import java.security.MessageDigest;
+import java.security.NoSuchAlgorithmException;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -11,8 +15,10 @@ public class FileInformation {
     private List<String> descriptions;
     private Map<String, Integer> containingNodes = new HashMap<>();
 
-    public FileInformation(File file, String hostIp, int hostPort) {
-        this.file = file;
+    public FileInformation(File file, String hostIp, int hostPort) throws NoSuchAlgorithmException, IOException {
+        this.setFile(file);
+        MessageDigest shaDigest = MessageDigest.getInstance("SHA-256");
+        this.setHash(checksum(shaDigest, file));
         this.addTitle(file.getName());
         this.addContainingNode(hostIp, hostPort);
     }
@@ -104,5 +110,30 @@ public class FileInformation {
                 }
         }
         return null;
+    }
+
+    private String checksum(MessageDigest digest, File file) throws IOException {
+        FileInputStream fis = new FileInputStream(file);
+
+        byte[] byteArray = new byte[1024];
+        int bytesCount = 0;
+
+        while ((bytesCount = fis.read(byteArray)) != -1)
+        {
+            digest.update(byteArray, 0, bytesCount);
+        };
+
+        fis.close();
+
+        byte[] bytes = digest.digest();
+        StringBuilder sb = new StringBuilder();
+
+        for (int i = 0; i < bytes.length; i++) {
+            sb.append(Integer
+                    .toString((bytes[i] & 0xff) + 0x100, 16)
+                    .substring(1));
+        }
+
+        return sb.toString();
     }
 }
