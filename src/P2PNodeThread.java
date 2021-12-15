@@ -1,3 +1,10 @@
+/* ---------------------------------------------------------------
+Práctica 1.
+Código fuente: P2PNodeThread.java
+Grau Informàtica
+73210823Y - Joel Romia Aribau
+53395926T - Pau Francino Urdaniz
+--------------------------------------------------------------- */
 import java.rmi.RemoteException;
 import java.rmi.registry.LocateRegistry;
 import java.rmi.registry.Registry;

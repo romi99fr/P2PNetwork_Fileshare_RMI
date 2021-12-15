@@ -1,3 +1,10 @@
+/* ---------------------------------------------------------------
+Práctica 1.
+Código fuente: P2PNodeImplementation.java
+Grau Informàtica
+73210823Y - Joel Romia Aribau
+53395926T - Pau Francino Urdaniz
+--------------------------------------------------------------- */
 import java.io.File;
 import java.io.FileInputStream;
 import java.io.IOException;
