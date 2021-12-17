@@ -1,6 +1,6 @@
 /* ---------------------------------------------------------------
 Práctica 1.
-Código fuente: P2PNodeInterface.java
+Código fuente: NodeInterface.java
 Grau Informàtica
 73210823Y - Joel Romia Aribau
 53395926T - Pau Francino Urdaniz
