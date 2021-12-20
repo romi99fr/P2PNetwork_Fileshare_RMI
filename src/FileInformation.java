@@ -10,6 +10,7 @@ import java.io.FileInputStream;
 import java.io.IOException;
 import java.security.MessageDigest;
 import java.security.NoSuchAlgorithmException;
+import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -17,9 +18,9 @@ import java.util.Map;
 public class FileInformation {
     private File file;
     private String hash;
-    private List<String> titles;
-    private List<String> keywords;
-    private List<String> descriptions;
+    private List<String> titles = new ArrayList<>();
+    private List<String> keywords = new ArrayList<>();
+    private List<String> descriptions = new ArrayList<>();
     private Map<String, Integer> containingNodes = new HashMap<>();
 
     public FileInformation(File file, String hostIp, int hostPort) throws NoSuchAlgorithmException, IOException {

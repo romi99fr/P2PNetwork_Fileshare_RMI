@@ -1,6 +1,6 @@
 /* ---------------------------------------------------------------
 Práctica 1.
-Código fuente: NodeThread.java
+Código fuente: P2PNodeThread.java
 Grau Informàtica
 73210823Y - Joel Romia Aribau
 53395926T - Pau Francino Urdaniz
