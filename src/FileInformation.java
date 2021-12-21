@@ -8,6 +8,7 @@ Grau Informàtica
 import java.io.File;
 import java.io.FileInputStream;
 import java.io.IOException;
+import java.io.Serializable;
 import java.security.MessageDigest;
 import java.security.NoSuchAlgorithmException;
 import java.util.ArrayList;
@@ -15,7 +16,7 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
-public class FileInformation {
+public class FileInformation implements Serializable {
     private File file;
     private String hash;
     private List<String> titles = new ArrayList<>();
